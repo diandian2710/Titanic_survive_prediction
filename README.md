@@ -61,36 +61,36 @@ _From the plot, some guesses can be done as follows:_
 _Cabin has to many missing values more than 3/4 so I decide to drop this attribute._  
 _Age has 177 missing values so next step I am going to predict the missing values._  
 `def  set_missing_valuesset_mis (data):`  
-`age_df=data[['Age','Fare','Parch','SibSp','Pclass']]`    
-`know_age = age_df[data.Age.notnull()].values`  
-`unknow_age = age_df[data.Age.isnull()].values`
-`X = know_age[:,1:]`  
-`y = know_age[:,0]`
-`rfr=RandomForestRegressor(random_state=0,n_estimators=2000,n_jobs=-1)`
-`rfr.fit(X,y)`
-`PredictAges = rfr.predict(unknow_age[:,1:])`
-`data.loc[(data.Age.isnull()),'Age'] = PredictAges`
-`data.drop(['Cabin'], axis=1, inplace = True)`
-`return data, rfr`
-`data_train, rfr = set_missing_values(data_train)`
-###3.2 Binarize categorical feature
+  `age_df=data[['Age','Fare','Parch','SibSp','Pclass']]`    
+  `know_age = age_df[data.Age.notnull()].values`  
+  `unknow_age = age_df[data.Age.isnull()].values`  
+  `X = know_age[:,1:]`    
+  `y = know_age[:,0]`  
+  `rfr=RandomForestRegressor(random_state=0,n_estimators=2000,n_jobs=-1)`  
+  `rfr.fit(X,y)`  
+  `PredictAges = rfr.predict(unknow_age[:,1:])`  
+  `data.loc[(data.Age.isnull()),'Age'] = PredictAges`  
+  `data.drop(['Cabin'], axis=1, inplace = True)`  
+  `return data, rfr`  
+`data_train, rfr = set_missing_values(data_train)`  
+### 3.2 Binarize categorical feature
 `def attribute_to_number(data):`
-&emsp;&emsp;`dummies_Pclass = pd.get_dummies(data['Pclass'], prefix='Pclass')`
-&emsp;&emsp;`dummies_Sex = pd.get_dummies(data['Sex'], prefix='Sex')`
-&emsp;&emsp;`dummies_Embarked = pd.get_dummies(data['Embarked'], prefix='Embarked')`
-&emsp;&emsp;`data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`
-&emsp;&emsp;`data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`
-&emsp;&emsp;`return data`
+`dummies_Pclass = pd.get_dummies(data['Pclass'], prefix='Pclass')`
+`dummies_Sex = pd.get_dummies(data['Sex'], prefix='Sex')`
+`dummies_Embarked = pd.get_dummies(data['Embarked'], prefix='Embarked')`
+&ems`data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`
+`data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`
+`return data`
 `data_train_number = attribute_to_number(data_train)`
 ### 3.3 Scale feature
 Age, Fare have large value change so i will normalize these values to (-1,1)  
 `def Scales(data): `
-&emsp;&emsp;`scaler = preprocessing.StandardScaler()`
-&emsp;&emsp;`age_scale_param = &emsp;&emsp;scaler.fit(data['Age'].values.reshape(-1, 1))`
-&emsp;&emsp;`data['Age_scaled'] = &emsp;&emsp;scaler.fit_transform(data['Age'].values.reshape(-1, 1), age_scale_param)`
-&emsp;&emsp;`fare_scale_param = &emsp;&emsp;scaler.fit(data['Fare'].values.reshape(-1, 1))`
-&emsp;&emsp;`data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`   
-&emsp;&emsp;`data.drop(['Fare', 'Age'], axis=1, inplace=True)`
+`scaler = preprocessing.StandardScaler()`
+`age_scale_param = scaler.fit(data['Age'].values.reshape(-1, 1))`
+`data['Age_scaled'] = scaler.fit_transform(data['Age'].values.reshape(-1, 1), age_scale_param)`
+`fare_scale_param = scaler.fit(data['Fare'].values.reshape(-1, 1))`
+`data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`   
+`data.drop(['Fare', 'Age'], axis=1, inplace=True)`
 `return data`
 `data_train_number_scales = Scales(data_train_number)`
 ## 4. Modeling
