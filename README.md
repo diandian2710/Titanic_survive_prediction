@@ -1,15 +1,15 @@
-#Titanic _ Surivive _ Prediction
-##Content
+# Titanic _ Surivive _ Prediction
+## Content
 1. WorkFlow
 2. Feature Engineering
 3. Data Pre-process
 4. Modeling
 
-##1. WorkFlow
+## 1. WorkFlow
 `![Alt Image Test](README_Pics/workflow.png "Workflow")
 _This workflow picture shows the steps of my project._
-##2. Feature Engineering 
-###2.1 Data Dictionary
+## 2. Feature Engineering 
+### 2.1 Data Dictionary
 
 |Variable|Definition|Key|
 |:------:|:--------:|:-:|
@@ -23,7 +23,7 @@ _This workflow picture shows the steps of my project._
 |cabin|Cabin number||
 |embarked|Port of Embarkation|C = Cherbourg, Q = Queenstown, S = Southampton||
 
-###2.2 Improt dataset and package
+### 2.2 Improt dataset and package
  * `import numpy as np`  
  * `import pandas as pd`  
  
@@ -48,30 +48,30 @@ _From the plot, some guesses can be done as follows:_
 2. the Sex picture shows Female has a high possibility to survive compared with male  
 3. the Embarked picture shows Cherbourg port has a high rate to survive, and most people died on Southampton  
 4. The Sibsp and Parch picture show the relationship of people may affect the survive rate
-##3. Data Pre-processing
+## 3. Data Pre-processing
 * `from sklearn.ensemble import RandomForestRegressor`
 * `import sklearn.preprocessing as preprocessing`
 * `from sklearn import linear_model`
   
-###3.1 Missing Values
+### 3.1 Missing Values
 * Total: 891
 * Age: 714 
 * Cabin: 204  
 
 _Cabin has to many missing values more than 3/4 so I decide to drop this attribute._  
 _Age has 177 missing values so next step I am going to predict the missing values._  
-`def  set_missing_valuesset_mis (data):` 
-&emsp;&emsp;`age_df=data[['Age','Fare','Parch','SibSp','Pclass']]`  
-&emsp;&emsp;`know_age = age_df[data.Age.notnull()].values`
-&emsp;&emsp;`unknow_age = age_df[data.Age.isnull()].values`
-&emsp;&emsp;`X = know_age[:,1:]`  
-&emsp;&emsp;`y = know_age[:,0]`
-&emsp;&emsp;`rfr=RandomForestRegressor(random_state=0,n_estimators=2000,n_jobs=-1)`
-&emsp;&emsp;`rfr.fit(X,y)`
-&emsp;&emsp;`PredictAges = rfr.predict(unknow_age[:,1:])`
-&emsp;&emsp;`data.loc[(data.Age.isnull()),'Age'] = PredictAges`
-&emsp;&emsp;`data.drop(['Cabin'], axis=1, inplace = True)`
-&emsp;&emsp;`return data, rfr`
+`def  set_missing_valuesset_mis (data):`  
+`age_df=data[['Age','Fare','Parch','SibSp','Pclass']]`    
+`know_age = age_df[data.Age.notnull()].values`  
+`unknow_age = age_df[data.Age.isnull()].values`
+`X = know_age[:,1:]`  
+`y = know_age[:,0]`
+`rfr=RandomForestRegressor(random_state=0,n_estimators=2000,n_jobs=-1)`
+`rfr.fit(X,y)`
+`PredictAges = rfr.predict(unknow_age[:,1:])`
+`data.loc[(data.Age.isnull()),'Age'] = PredictAges`
+`data.drop(['Cabin'], axis=1, inplace = True)`
+`return data, rfr`
 `data_train, rfr = set_missing_values(data_train)`
 ###3.2 Binarize categorical feature
 `def attribute_to_number(data):`
@@ -82,7 +82,7 @@ _Age has 177 missing values so next step I am going to predict the missing value
 &emsp;&emsp;`data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`
 &emsp;&emsp;`return data`
 `data_train_number = attribute_to_number(data_train)`
-###3.3 Scale feature
+### 3.3 Scale feature
 Age, Fare have large value change so i will normalize these values to (-1,1)  
 `def Scales(data): `
 &emsp;&emsp;`scaler = preprocessing.StandardScaler()`
@@ -93,8 +93,8 @@ Age, Fare have large value change so i will normalize these values to (-1,1)
 &emsp;&emsp;`data.drop(['Fare', 'Age'], axis=1, inplace=True)`
 `return data`
 `data_train_number_scales = Scales(data_train_number)`
-##4. Modeling
-###4.1 Get X and y
+## 4. Modeling
+### 4.1 Get X and y
 `data_train_number_scales.drop(['PassengerId','Name','Ticket'], axis=1, inplace=True)`
 `data_copy = data_train_number_scales.copy(deep=True) `
 `data_copy.drop(
@@ -103,25 +103,25 @@ Age, Fare have large value change so i will normalize these values to (-1,1)
 `y = np.array(data_copy)`
 `data_train_number_scales.drop(['Survived'], axis=1, inplace=True)`
 `X = np.array(data_train_number_scales) `
-###4.2 Build logisticRefresion model
+### 4.2 Build logisticRefresion model
 `clf = linear_model.LogisticRegression(C=1.0, penalty='l1', tol=1e-6)`
 `clf.fit(X, y)`   
 
 `clf`
-##5. Model Evaluation
-###5.1 Import test data
+## 5. Model Evaluation
+### 5.1 Import test data
 `data_test = pd.read_csv('test.csv')`
-###5.2 Data pre-processing 
+### 5.2 Data pre-processing 
 `data_test.loc[data_test.Fare.isnull(), 'Fare'] = 0`
 `set_missing_values(data_test)` ##missing values
 `data_test_number = attribute_to_number(data_test)`##binarize
 `data_test_number_scales = Scales(data_test_number)`##scales 
 `df_test = data_test_number_scales`
-####5.3 Prediction
+#### 5.3 Prediction
 `df_test.drop(['PassengerId','Name','Ticket'],axis=1,inplace=True)`
 `test = np.array(df_test)`
 `predictions = clf.predict(test)`
 `result = pd.DataFrame({'PassengerId':data_test['PassengerId'].values, 'Survived':predictions.astype(np.int32)})`
 `result.to_csv('logistic_regression_predictions.csv', index=None)`
-###5.4 Evaluation by Kaggle
+### 5.4 Evaluation by Kaggle
 `![Alt Image Test](README_Pics/workflow.png "Kaggle_scores")
