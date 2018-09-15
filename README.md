@@ -74,23 +74,23 @@ _Age has 177 missing values so next step I am going to predict the missing value
   `return data, rfr`  
 `data_train, rfr = set_missing_values(data_train)`  
 ### 3.2 Binarize categorical feature
-`def attribute_to_number(data):`
-`dummies_Pclass = pd.get_dummies(data['Pclass'], prefix='Pclass')`
-`dummies_Sex = pd.get_dummies(data['Sex'], prefix='Sex')`
-`dummies_Embarked = pd.get_dummies(data['Embarked'], prefix='Embarked')`
-`data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`
-`data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`
-`return data`
+`def attribute_to_number(data):`  
+`dummies_Pclass = pd.get_dummies(data['Pclass'], prefix='Pclass')`  
+`dummies_Sex = pd.get_dummies(data['Sex'], prefix='Sex')`  
+`dummies_Embarked = pd.get_dummies(data['Embarked'], prefix='Embarked')`  
+`data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`  
+`data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`  
+`return data`  
 `data_train_number = attribute_to_number(data_train)`
 ### 3.3 Scale feature
 Age, Fare have large value change so i will normalize these values to (-1,1)  
 
-`def Scales(data): `  
-`scaler = preprocessing.StandardScaler()`  
-`age_scale_param = scaler.fit(data['Age'].values.reshape(-1, 1))`
+`def Scales(data):`    
+`scaler = preprocessing.StandardScaler()`    
+`age_scale_param = scaler.fit(data['Age'].values.reshape(-1, 1))`  
 `data['Age_scaled'] = scaler.fit_transform(data['Age'].values.reshape(-1, 1), age_scale_param)`  
 `fare_scale_param = scaler.fit(data['Fare'].values.reshape(-1, 1))`  
-`data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`     
+`data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`  
 `data.drop(['Fare', 'Age'], axis=1, inplace=True)`  
 `return data`  
 `data_train_number_scales = Scales(data_train_number)`  
