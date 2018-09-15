@@ -78,50 +78,51 @@ _Age has 177 missing values so next step I am going to predict the missing value
 `dummies_Pclass = pd.get_dummies(data['Pclass'], prefix='Pclass')`
 `dummies_Sex = pd.get_dummies(data['Sex'], prefix='Sex')`
 `dummies_Embarked = pd.get_dummies(data['Embarked'], prefix='Embarked')`
-&ems`data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`
+`data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`
 `data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`
 `return data`
 `data_train_number = attribute_to_number(data_train)`
 ### 3.3 Scale feature
 Age, Fare have large value change so i will normalize these values to (-1,1)  
-`def Scales(data): `
-`scaler = preprocessing.StandardScaler()`
+
+`def Scales(data): `  
+`scaler = preprocessing.StandardScaler()`  
 `age_scale_param = scaler.fit(data['Age'].values.reshape(-1, 1))`
-`data['Age_scaled'] = scaler.fit_transform(data['Age'].values.reshape(-1, 1), age_scale_param)`
-`fare_scale_param = scaler.fit(data['Fare'].values.reshape(-1, 1))`
-`data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`   
-`data.drop(['Fare', 'Age'], axis=1, inplace=True)`
-`return data`
-`data_train_number_scales = Scales(data_train_number)`
+`data['Age_scaled'] = scaler.fit_transform(data['Age'].values.reshape(-1, 1), age_scale_param)`  
+`fare_scale_param = scaler.fit(data['Fare'].values.reshape(-1, 1))`  
+`data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`     
+`data.drop(['Fare', 'Age'], axis=1, inplace=True)`  
+`return data`  
+`data_train_number_scales = Scales(data_train_number)`  
 ## 4. Modeling
 ### 4.1 Get X and y
-`data_train_number_scales.drop(['PassengerId','Name','Ticket'], axis=1, inplace=True)`
-`data_copy = data_train_number_scales.copy(deep=True) `
+`data_train_number_scales.drop(['PassengerId','Name','Ticket'], axis=1, inplace=True)`  
+`data_copy = data_train_number_scales.copy(deep=True)`    
 `data_copy.drop(
         ['Pclass_1', 'Pclass_2', 'Pclass_3', 'Embarked_C', 'Embarked_Q', 'Embarked_S', 'Sex_female', 'Sex_male',
-         'Age_scaled', 'Fare_scaled','SibSp','Parch'], axis=1, inplace=True)`
-`y = np.array(data_copy)`
-`data_train_number_scales.drop(['Survived'], axis=1, inplace=True)`
-`X = np.array(data_train_number_scales) `
+         'Age_scaled', 'Fare_scaled','SibSp','Parch'], axis=1, inplace=True)`  
+`y = np.array(data_copy)`  
+`data_train_number_scales.drop(['Survived'], axis=1, inplace=True)`  
+`X = np.array(data_train_number_scales) `  
 ### 4.2 Build logisticRefresion model
-`clf = linear_model.LogisticRegression(C=1.0, penalty='l1', tol=1e-6)`
-`clf.fit(X, y)`   
+`clf = linear_model.LogisticRegression(C=1.0, penalty='l1', tol=1e-6)`  
+`clf.fit(X, y)`     
 
 `clf`
 ## 5. Model Evaluation
 ### 5.1 Import test data
-`data_test = pd.read_csv('test.csv')`
+`data_test = pd.read_csv('test.csv')`  
 ### 5.2 Data pre-processing 
-`data_test.loc[data_test.Fare.isnull(), 'Fare'] = 0`
-`set_missing_values(data_test)` ##missing values
-`data_test_number = attribute_to_number(data_test)`##binarize
-`data_test_number_scales = Scales(data_test_number)`##scales 
-`df_test = data_test_number_scales`
-#### 5.3 Prediction
-`df_test.drop(['PassengerId','Name','Ticket'],axis=1,inplace=True)`
-`test = np.array(df_test)`
-`predictions = clf.predict(test)`
-`result = pd.DataFrame({'PassengerId':data_test['PassengerId'].values, 'Survived':predictions.astype(np.int32)})`
-`result.to_csv('logistic_regression_predictions.csv', index=None)`
+`data_test.loc[data_test.Fare.isnull(), 'Fare'] = 0`  
+`set_missing_values(data_test)` ##missing values  
+`data_test_number = attribute_to_number(data_test)`##binarize  
+`data_test_number_scales = Scales(data_test_number)`##scales   
+`df_test = data_test_number_scales`  
+#### 5.3 Prediction 
+`df_test.drop(['PassengerId','Name','Ticket'],axis=1,inplace=True)`  
+`test = np.array(df_test)`  
+`predictions = clf.predict(test)`  
+`result = pd.DataFrame({'PassengerId':data_test['PassengerId'].values, 'Survived':predictions.astype(np.int32)})`  
+`result.to_csv('logistic_regression_predictions.csv', index=None)`  
 ### 5.4 Evaluation by Kaggle
-`![Alt Image Test](README_Pics/workflow.png "Kaggle_scores")
+`![Alt Image Test](README_Pics/kaggle_scores.png "Kaggle_scores")
