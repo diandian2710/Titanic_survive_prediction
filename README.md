@@ -62,16 +62,17 @@ _Cabin has to many missing values more than 3/4 so I decide to drop this attribu
 _Age has 177 missing values so next step I am going to predict the missing values._  
 `def  set_missing_valuesset_mis (data):`  
 >`age_df=data[['Age','Fare','Parch','SibSp','Pclass']]`    
- `know_age = age_df[data.Age.notnull()].values`  
- `unknow_age = age_df[data.Age.isnull()].values`  
- `X = know_age[:,1:]`    
- `y = know_age[:,0]`  
- `rfr=RandomForestRegressor(random_state=0,n_estimators=2000,n_jobs=-1)`  
- `rfr.fit(X,y)`  
- `PredictAges = rfr.predict(unknow_age[:,1:])`  
- `data.loc[(data.Age.isnull()),'Age'] = PredictAges`  
- `data.drop(['Cabin'], axis=1, inplace = True)`  
->`return data, rfr`  
+`know_age = age_df[data.Age.notnull()].values`  
+`unknow_age = age_df[data.Age.isnull()].values`  
+`X = know_age[:,1:]`    
+`y = know_age[:,0]`  
+`rfr=RandomForestRegressor(random_state=0,n_estimators=2000,n_jobs=-1)`  
+`rfr.fit(X,y)`  
+`PredictAges = rfr.predict(unknow_age[:,1:])`  
+`data.loc[(data.Age.isnull()),'Age'] = PredictAges`  
+`data.drop(['Cabin'], axis=1, inplace = True)`  
+`return data, rfr`  
+>
 `data_train, rfr = set_missing_values(data_train)`  
 ### 3.2 Binarize categorical feature
 `def attribute_to_number(data):`  
@@ -80,7 +81,8 @@ _Age has 177 missing values so next step I am going to predict the missing value
 `dummies_Embarked = pd.get_dummies(data['Embarked'], prefix='Embarked')`  
 `data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`  
 `data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`  
-`return data`  
+`return data` 
+>
 `data_train_number = attribute_to_number(data_train)`
 ### 3.3 Scale feature
 Age, Fare have large value change so i will normalize these values to (-1,1)  
@@ -93,6 +95,7 @@ Age, Fare have large value change so i will normalize these values to (-1,1)
 `data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`  
 `data.drop(['Fare', 'Age'], axis=1, inplace=True)`  
 `return data`  
+>
 `data_train_number_scales = Scales(data_train_number)`  
 ## 4. Modeling
 ### 4.1 Get X and y
