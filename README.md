@@ -61,8 +61,8 @@ _From the plot, some guesses can be done as follows:_
 _Cabin has to many missing values more than 3/4 so I decide to drop this attribute._  
 _Age has 177 missing values so next step I am going to predict the missing values._  
 `def  set_missing_valuesset_mis (data):`  
-  `age_df=data[['Age','Fare','Parch','SibSp','Pclass']]`    
-  `know_age = age_df[data.Age.notnull()].values`  
+>`age_df=data[['Age','Fare','Parch','SibSp','Pclass']]`    
+>`know_age = age_df[data.Age.notnull()].values`  
   `unknow_age = age_df[data.Age.isnull()].values`  
   `X = know_age[:,1:]`    
   `y = know_age[:,0]`  
