@@ -72,7 +72,7 @@ _Age has 177 missing values so next step I am going to predict the missing value
 `data.loc[(data.Age.isnull()),'Age'] = PredictAges`  
 `data.drop(['Cabin'], axis=1, inplace = True)`  
 `return data, rfr`  
->
+
 `data_train, rfr = set_missing_values(data_train)`  
 ### 3.2 Binarize categorical feature
 `def attribute_to_number(data):`  
@@ -82,7 +82,7 @@ _Age has 177 missing values so next step I am going to predict the missing value
 `data = pd.concat([data,dummies_Pclass,dummies_Sex,dummies_Embarked],axis=1)`  
 `data.drop(['Pclass','Sex','Embarked'], axis=1, inplace=True)`  
 `return data` 
->
+
 `data_train_number = attribute_to_number(data_train)`
 ### 3.3 Scale feature
 Age, Fare have large value change so i will normalize these values to (-1,1)  
@@ -95,7 +95,7 @@ Age, Fare have large value change so i will normalize these values to (-1,1)
 `data['Fare_scaled'] = scaler.fit_transform(data['Fare'].values.reshape(-1, 1), fare_scale_param)`  
 `data.drop(['Fare', 'Age'], axis=1, inplace=True)`  
 `return data`  
->
+
 `data_train_number_scales = Scales(data_train_number)`  
 ## 4. Modeling
 ### 4.1 Get X and y
