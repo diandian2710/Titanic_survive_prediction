@@ -34,7 +34,7 @@ _Feature Engineering proecess is an important process.  I learned from other con
 * `import matplotlib.pyplot as plt`
 * `import seaborn as sns`
 
-`f,ax = plt.subplots(2,3,figsize=(16,10))`
+`f,ax = plt.subplots(2,3,figsize=(16,10))`  
 `sns.countplot('Pclass',hue='Survived',data=data_train,ax=ax[0,0])`
 `sns.countplot('Sex',hue='Survived',data=data_train,ax=ax[0,1])`
 `sns.countplot('Embarked',hue='Survived',data=data_train,ax=ax[0,2])`
