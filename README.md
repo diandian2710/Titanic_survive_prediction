@@ -107,7 +107,7 @@ Age, Fare have large value change so i will normalize these values to (-1,1)
 `y = np.array(data_copy)`  
 `data_train_number_scales.drop(['Survived'], axis=1, inplace=True)`  
 `X = np.array(data_train_number_scales) `  
-### 4.2 Build logisticRefresion model
+### 4.2 Build logisticRegression model
 `clf = linear_model.LogisticRegression(C=1.0, penalty='l1', tol=1e-6)`  
 `clf.fit(X, y)`     
 
